@@ -16,13 +16,6 @@ import debug from '../Debug/index.js'
 import Socket from '../Socket/index.js'
 import JsonEncoder from '../JsonEncoder/index.js'
 
-/**
- * Returns the ws protocol based upon HTTP or HTTPS
- *
- * @returns {String}
- *
- */
-const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
 
 /**
  * Connection class is used to make a TCP/Socket connection
@@ -38,7 +31,7 @@ export default class Connection extends Emitter {
   constructor (url, options) {
     super()
 
-    url = url || `${wsProtocol}://${window.location.host}`
+    url = url 
 
     /**
      * Connection options
@@ -588,7 +581,7 @@ export default class Connection extends Emitter {
       debug('creating socket connection on %s url', url)
     }
 
-    this.ws = new window.WebSocket(url)
+    this.ws = new WebSocket(url)
     this.ws.onclose = (event) => this._onClose(event)
     this.ws.onerror = (event) => this._onError(event)
     this.ws.onopen = (event) => this._onOpen(event)
@@ -607,7 +600,7 @@ export default class Connection extends Emitter {
    * @return {void}
    */
   write (payload) {
-    if (this.ws.readyState !== window.WebSocket.OPEN) {
+    if (this.ws.readyState !== WebSocket.OPEN) {
       if (process.env.NODE_ENV !== 'production') {
         debug('connection is not in open state, current state %s', this.ws.readyState)
       }
@@ -767,7 +760,7 @@ export default class Connection extends Emitter {
    * @chainable
    */
   withBasicAuth (username, password) {
-    this._extendedQuery.basic = window.btoa(`${username}:${password}`)
+    this._extendedQuery.basic = btoa(`${username}:${password}`)
     return this
   }
 
